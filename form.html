@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo</title>
+</head>
+<body>
+<div>
+    <h3>Add News</h3>
+</div>
+<form name="news-form">
+    <p>
+        <input type="hidden" name="id">
+    </p>
+    <p>
+        <lable>Title</lable>
+        <input type="text" name="title">
+    </p>
+    <p>
+        <lable>Description</lable>
+        <input type="text" name="description">
+    </p>
+    <p>
+        <lable>Image</lable>
+        <input type="text" name="image">
+    </p>
+    <p>
+        <lable>Content</lable>
+        <input type="text" name="content">
+    </p>
+    <p>
+        <lable>Category</lable>
+        <input type="text" name="category">
+    </p>
+    <p>
+        <lable>Status</lable>
+        <input type="text" name="status">
+    </p>
+    <input type="submit" name="submit" value="Submit">
+    <input type="reset" value="Reset">
+</form>
+<script>
+    document.addEventListener('DOMContentLoaded',function () {
+        var action = 1
+        var url = `http://localhost:8080/api/v1/news`;
+        var method = 'POST';
+        const urlParmas = new URLSearchParams(window.location.search);
+        const id = urlParmas.get('id');
+        if (id !== undefined && id !== null && id.length > 0){
+            action = 2;
+        }
+        var btnSubmit = document.forms['news-form']['submit'];
+        var inputTitle = document.forms['news-form']['title'];
+        var inputDescription = document.forms['news-form']['description'];
+        var inputImage = document.forms['news-form']['image'];
+        var inputContent = document.forms['news-form']['content'];
+        var inputCategory = document.forms['news-form']['category'];
+        var inputStatus = document.forms['news-form']['status'];
+        if (action === 2){
+            url = `http://localhost:8080/api/v1/news/${id}`;
+            method = 'PUT';
+            loadNewsDetail(id);
+        }
+        btnSubmit.onclick = function (e) {
+            e.preventDefault();
+            var objectToSend = {
+                'title' : inputTitle.value,
+                'description' : inputDescription.value,
+                'image' : inputImage.value,
+                'content' : inputContent.value,
+                'category' : inputCategory.value,
+                'status' : inputStatus.value,
+            }
+            var data = JSON.stringify(objectToSend);
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200){
+                    alert("Post news success!!");
+                    window.location.href = 'detail.html';
+                }
+            }
+            xhr.open(method ,url, false);
+            xhr.setRequestHeader("Content-Type", "application/json;charset = UTF-8");
+            xhr.send(data);
+        }
+    });
+    function loadNewsDetail(id) {
+        var getNewsDetailUrl = `http://localhost:8080/api/v1/news/${id}`;
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4){
+                if (xhr.status === 200){
+                    var newsDetail = JSON.parse(xhr.responseText);
+                    document.forms['news-form']['title'].value = newsDetail.title;
+                    document.forms['news-form']['description'].value = newsDetail.description;
+                    document.forms['news-form']['image'].value = newsDetail.image;
+                    document.forms['news-form']['content'].value = newsDetail.content;
+                    document.forms['news-form']['category'].value = newsDetail.category;
+                    document.forms['news-form']['status'].value = newsDetail.status;
+                } else {
+                    alert("Can't load this news");
+                }
+            }
+        }
+        xhr.open('GET' ,getNewsDetailUrl, false);
+        xhr.send();
+    }
+</script>
+</body>
+</html>
