@@ -3,6 +3,7 @@ package com.example.demo1.News;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -11,6 +12,11 @@ import java.util.List;
 public class NewsApi {
     @Autowired
     NewsRepository newsRepository;
+    public static List<News> listNews;
+
+    static {
+        listNews = new ArrayList<>();
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public List<News> findALL(

@@ -13,8 +13,8 @@
         <input type="hidden" name="id">
     </p>
     <p>
-        <lable>Title</lable>
-        <input type="text" name="title">
+        <lable>Name</lable>
+        <input type="text" name="name">
     </p>
     <p>
         <lable>Description</lable>
@@ -23,10 +23,6 @@
     <p>
         <lable>Image</lable>
         <input type="text" name="image">
-    </p>
-    <p>
-        <lable>Content</lable>
-        <input type="text" name="content">
     </p>
     <p>
         <lable>Category</lable>
@@ -50,10 +46,9 @@
             action = 2;
         }
         var btnSubmit = document.forms['news-form']['submit'];
-        var inputTitle = document.forms['news-form']['title'];
+        var inputName = document.forms['news-form']['name'];
         var inputDescription = document.forms['news-form']['description'];
         var inputImage = document.forms['news-form']['image'];
-        var inputContent = document.forms['news-form']['content'];
         var inputCategory = document.forms['news-form']['category'];
         var inputStatus = document.forms['news-form']['status'];
         if (action === 2){
@@ -64,10 +59,9 @@
         btnSubmit.onclick = function (e) {
             e.preventDefault();
             var objectToSend = {
-                'title' : inputTitle.value,
+                'name' : inputName.value,
                 'description' : inputDescription.value,
                 'image' : inputImage.value,
-                'content' : inputContent.value,
                 'category' : inputCategory.value,
                 'status' : inputStatus.value,
             }
@@ -76,7 +70,7 @@
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200){
                     alert("Post news success!!");
-                    window.location.href = 'detail.html';
+                    window.location.href = 'index.html';
                 }
             }
             xhr.open(method ,url, false);
@@ -91,10 +85,9 @@
             if (xhr.readyState === 4){
                 if (xhr.status === 200){
                     var newsDetail = JSON.parse(xhr.responseText);
-                    document.forms['news-form']['title'].value = newsDetail.title;
+                    document.forms['news-form']['name'].value = newsDetail.name;
                     document.forms['news-form']['description'].value = newsDetail.description;
                     document.forms['news-form']['image'].value = newsDetail.image;
-                    document.forms['news-form']['content'].value = newsDetail.content;
                     document.forms['news-form']['category'].value = newsDetail.category;
                     document.forms['news-form']['status'].value = newsDetail.status;
                 } else {
